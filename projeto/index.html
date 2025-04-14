@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Projeto</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="cabecalho">
+        <h1 class="titulo">Meu Primeiro Projeto</h1>
+        <h2 class="links">Item 1</h2>
+        <h2 class="links">Item 2</h2>
+        <h2 class="links">Item 2</h2>
+    </header>
+
+    <main>
+        <div class="inicio">
+            <h1>Olá, esse é o meu primeiro projeto utilizando HTML e CSS.</h1>
+            <p>Para fins de estudo, estarei realizando o desenvolvimento desse projeto.</p>
+        </div>
+        <div>
+            <h2>Para começar, iremos realizar ações básicas, começando pela estilização da página.</h2>
+            <p class="fonte">Este é o exemplo de como poderemos alterar a fonte do projeto.</p>
+        </div>
+        <div class="input">
+            <h2>Para continuar, iremos aprender a usar o INPUT</h2>
+            <label>Escreva abaixo o seu Nome Completo.</label>
+            <input placeholder="NOME COMPLETO" id="nome">
+            <button id="botao">Inserir Nome</button>
+            <p id="seunome"></p>
+        </div>
+        <div class="input">
+            <h2>Estou gostando de ver, agora, iremos fazer uma lista de tarefas com um prazo pré-determinado!</h2>
+            <label>Adicione aqui a sua tarefa.</label>
+            <input placeholder="TAREFA" id="tarefas">
+            <select id="mesesTarefa">
+                <option value="" disabled selected></option>
+                <option value="2 meses">2 meses</option>
+                <option value="4 meses">4 meses</option>
+                <option value="6 meses">6 meses</option>
+            </select>
+            <ul id="listaDeTarefa"></ul>
+            <button id="botao2">Adicionar Tarefa</button>
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <p>Todos os direitos reservados por mim.</p>
+    </footer>
+</body>
+</html>
