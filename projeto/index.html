@@ -10,9 +10,9 @@
 <body>
     <header class="cabecalho">
         <h1 class="titulo">Meu Primeiro Projeto</h1>
-        <h2 class="links">Item 1</h2>
-        <h2 class="links">Item 2</h2>
-        <h2 class="links">Item 2</h2>
+        <h2 class="link1">Item 1</h2>
+        <h2 class="link2">Item 2</h2>
+        <h2 class="link3">Item 2</h2>
     </header>
 
     <main>
@@ -33,16 +33,16 @@
         </div>
         <div class="input">
             <h2>Estou gostando de ver, agora, iremos fazer uma lista de tarefas com um prazo pré-determinado!</h2>
-            <label>Adicione aqui a sua tarefa.</label>
+            <label id="text">Adicione aqui a sua tarefa.</label>
             <input placeholder="TAREFA" id="tarefas">
             <select id="mesesTarefa">
-                <option value="" disabled selected></option>
+                <option value="" disabled selected>Prazo</option>
                 <option value="2 meses">2 meses</option>
                 <option value="4 meses">4 meses</option>
                 <option value="6 meses">6 meses</option>
             </select>
             <ul id="listaDeTarefa"></ul>
-            <button id="botao2">Adicionar Tarefa</button>
+            <button id="botao2">+</button>
         </div>
     </main>
 
