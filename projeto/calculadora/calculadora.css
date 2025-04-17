@@ -1,7 +1,62 @@
 *{
-    background-color: lightcyan;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header{
+    background-color:   rgb(16, 166 , 212);
+    font-style: oblique;    
+    display: flex;  
 }
 
 #volta{
+    display: flex;
+    align-self: start;
+    font-size: 2rem;
+    margin: 1rem;
+    justify-content: center;
     background-color: black;
+    margin-left: 4rem;
+    width: 12vw;
+    padding: 1.5rem;
+    color: aqua;
+    border-radius: 40rem;
+    cursor: pointer;
+}
+
+#calculadora{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+#numbers{
+    width: 50vw;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+#number{
+    display: flex;
+    justify-content: center;
+    background-color: aquamarine;
+    list-style-type: none;
+    padding: 1rem;
+    font-size: 2rem;
+    flex: 1 1 25%;
+    border: 0.15rem solid black;
+    cursor: crosshair;
+}
+
+#resposta{
+    margin-top: 2rem;
+    padding: 2rem;
+    font-size: 1.5rem;
+    border: 0.15rem solid black;
+    width: 50vw;
+    background-color: rgb(187, 186, 182);
 }

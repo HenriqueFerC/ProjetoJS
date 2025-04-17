@@ -55,3 +55,9 @@ pagina2.addEventListener("click", function(event){
 })
 
 
+let link2 = document.querySelector(".link2");
+
+link2.addEventListener("click", function(event){
+    event.preventDefault();
+    window.location.href ="./agenda/agenda.html";
+})
