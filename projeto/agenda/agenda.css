@@ -70,8 +70,22 @@ main{
     justify-content: center;
 }
 
+#listaTarefa{
+    display: flex;
+    flex-direction: column;
+}
+
 .lista{
     display: flex;
-    justify-content: center;
+    align-self: center;
     list-style: none;
 }
+
+.buttonList{
+    display: flex;
+    align-self: center;
+    width: 10vw;
+    justify-content: center;
+    background-color: rgb(241, 90, 90);
+}
+

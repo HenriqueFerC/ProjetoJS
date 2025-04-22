@@ -14,11 +14,25 @@ botaoVoltar?.addEventListener("click", function(event){
     window.location.href = "/";
 })
 
+    
+const localStorageToParse = localStorage.getItem('itemStorageJSON');
+const arrayTasks = localStorageToParse ? JSON.parse(localStorageToParse) : [];
+
+arrayTasks.forEach((task)=>{
+    const listaDeTarefas = document.querySelector("#listaTarefa");
+    const itemLista = document.createElement("li");
+    itemLista.classList.add("lista");
+    itemLista.textContent = `Tarefa: ${task.tarefaValue} horário: ${task.horario1Value} às ${task.horario2Value}`;
+    const buttonList = document.createElement("button");
+    buttonList.classList.add("buttonList");
+    buttonList.textContent = "excluir";
+    listaDeTarefas.appendChild(itemLista);
+    listaDeTarefas.appendChild(buttonList);
+})
+
+console.log(arrayTasks);
 
 const botaoTarefa = document.querySelector("#botaoTarefa");
-
-const localStorageItems = localStorage;
-
 botaoTarefa?.addEventListener("click", function(){
     const tarefa = document.querySelector("#tarefa");
     const tarefaValue = tarefa.value.toUpperCase();
@@ -32,6 +46,8 @@ botaoTarefa?.addEventListener("click", function(){
 
     let erro = document.querySelector("#error");
     
+    
+
     if(validationNull()){
         tarefa.value = "";
         horario1.value = "";
@@ -68,20 +84,24 @@ botaoTarefa?.addEventListener("click", function(){
 
     const listaDeTarefas = document.querySelector("#listaTarefa");
     const itemLista = document.createElement("li");
+    const buttonList = document.createElement("button");
     itemLista.classList.add("lista");
-    itemLista.textContent = `Tarefa: ${tarefaValue} horário ${horario1Value} às ${horario2Value}`
+    buttonList.classList.add("buttonList");
+    buttonList.textContent = "excluir";
+    itemLista.textContent = `Tarefa: ${tarefaValue} horário: ${horario1Value} às ${horario2Value}`;
     
 
     listaDeTarefas.appendChild(itemLista);
+    listaDeTarefas.appendChild(buttonList);
 
     const itemStorage = {
         tarefaValue,
         horario1Value,
         horario2Value
         };
-    const itemStorageJSON = JSON.stringify(itemStorage);
-
-
+    arrayTasks.push(itemStorage);
+    const itemStorageJSON = JSON.stringify(arrayTasks);
+    
 
     tarefa.value = "";
     horario1.value = "";
@@ -91,5 +111,18 @@ botaoTarefa?.addEventListener("click", function(){
 
 
 
-    localStorageItems.setItem('itemStorageJSON', itemStorageJSON);
+    localStorage.setItem('itemStorageJSON', itemStorageJSON);
 })
+
+function atualizarEventos() {
+    const buttonRemove = document.querySelectorAll(".buttonList");
+    buttonRemove.forEach((button, index) => {
+        button?.addEventListener("click", function () {
+            arrayTasks.splice(index, 1);
+            atualizarEventos();
+            localStorage.removeItem('itemStorageJSON', horario1)
+        });
+    });
+}
+
+atualizarEventos();
