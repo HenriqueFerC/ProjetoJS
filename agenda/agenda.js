@@ -4,8 +4,29 @@ let diaAtual = dataAtualJS.getDate();
 let mesAtual = dataAtualJS.getMonth()+1;
 let anoAtual = dataAtualJS.getFullYear();
 
+const todayDate = new Date(anoAtual, mesAtual, diaAtual);
+const valueDate = todayDate.getTime();
+
 let dataAtual = document.querySelector("#dataAgenda");
 dataAtual.textContent = `Essa é a minha agenda pessoal do dia ${diaAtual}/${mesAtual}/${anoAtual}`;
+
+const dataAtualStorage = localStorage.getItem('DataAtual');
+const dataAtualParse = dataAtualStorage ? JSON.parse(dataAtualStorage) : [];
+
+if(dataAtualParse < valueDate){
+    const arrayTasks = localStorageToParse ? JSON.parse(localStorageToParse) : [];
+    arrayTasks.splice(0, arrayTasks.length);
+    localStorage.removeItem('itemStorageJSON');
+}
+
+const dataAtualJSON = JSON.stringify(valueDate);
+localStorage.setItem('DataAtual', dataAtualJSON);
+
+
+console.log(dataAtualParse);
+
+console.log(valueDate)
+
 
 let botaoVoltar = document.querySelector("#voltar");
 
@@ -34,7 +55,6 @@ arrayTasks.forEach((task)=>{
     itemLista.appendChild(updateList);
 })
 
-console.log(arrayTasks);
 
 const botaoTarefa = document.querySelector("#botaoTarefa");
 botaoTarefa?.addEventListener("click", function(){
@@ -50,7 +70,28 @@ botaoTarefa?.addEventListener("click", function(){
 
     let erro = document.querySelector("#error");
     
+    function validationHour(){
+        arrayTasks.forEach((task => {
+            if(horario1Value >= task.horario1Value && horario1Value <= task.horario2Value){
+                return true;
+            }
+            else if(horario2Value >= task.horario1Value && horario2Value <= task.horario2Value){
+                return true;
+            }
+        }))
+    return false;
+}
     
+
+    if(validationHour()){
+        tarefa.value = "";
+        horario1.value = "";
+        horario2.value = "";
+
+        erro.textContent = "Horário já cadastrado";
+
+        return;
+    }
 
     if(validationNull()){
         tarefa.value = "";
@@ -63,7 +104,7 @@ botaoTarefa?.addEventListener("click", function(){
     }
 
     function validationNull(){
-        if(tarefaValue == "" || horario1Value == "" || horario2Value == ""){
+        if(tarefaValue.trim() == "" || horario1Value == "" || horario2Value == ""){
             return true;
         }
         return false;
@@ -134,7 +175,6 @@ function removerEventos() {
             listaDeTarefas.removeChild(listaDeTarefas.children[index]);
 
             localStorage.setItem('itemStorageJSON', itemStorageJSON)
-            removerEventos();
         });
     });
 }
@@ -146,6 +186,10 @@ function atualizarEventos(){
     updateButton.forEach((button, index) => {
         button.addEventListener("click", function(){
             const updatedTask = prompt("Coloque aqui o Nome Atualizado");
+
+            if(updatedTask.trim() == ""){
+                return;
+            }
 
             arrayTasks[index].tarefaValue = updatedTask;
             
@@ -171,3 +215,4 @@ function atualizarEventos(){
 }
 
 atualizarEventos();
+
