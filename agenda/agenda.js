@@ -11,21 +11,15 @@ let dataAtual = document.querySelector("#dataAgenda");
 dataAtual.textContent = `Essa é a minha agenda pessoal do dia ${diaAtual}/${mesAtual}/${anoAtual}`;
 
 const dataAtualStorage = localStorage.getItem('DataAtual');
-const dataAtualParse = dataAtualStorage ? JSON.parse(dataAtualStorage) : [];
+const dataAtualParse = dataAtualStorage ? JSON.parse(dataAtualStorage) : 0;
 
 if(dataAtualParse < valueDate){
-    const arrayTasks = localStorageToParse ? JSON.parse(localStorageToParse) : [];
-    arrayTasks.splice(0, arrayTasks.length);
     localStorage.removeItem('itemStorageJSON');
 }
 
 const dataAtualJSON = JSON.stringify(valueDate);
 localStorage.setItem('DataAtual', dataAtualJSON);
 
-
-console.log(dataAtualParse);
-
-console.log(valueDate)
 
 
 let botaoVoltar = document.querySelector("#voltar");
@@ -55,6 +49,13 @@ arrayTasks.forEach((task)=>{
     itemLista.appendChild(updateList);
 })
 
+function validationNull(tarefaValue, horario1Value, horario2Value){
+    if(tarefaValue.trim() == "" || horario1Value == "" || horario2Value == ""){
+        return true;
+    }
+    return false;
+}
+
 
 const botaoTarefa = document.querySelector("#botaoTarefa");
 botaoTarefa?.addEventListener("click", function(){
@@ -70,20 +71,34 @@ botaoTarefa?.addEventListener("click", function(){
 
     let erro = document.querySelector("#error");
     
-    function validationHour(){
+    function validationHour(hora1, hora2){
         arrayTasks.forEach((task => {
-            if(horario1Value >= task.horario1Value && horario1Value <= task.horario2Value){
+            const [hour1, minute1] = hora1.split(":");
+            const [hour2, minute2] = hora2.split(":");
+            let [taskHour1, taskMinute1] = task.horario1Value.split(":");
+            let [taskHour2, taskMinute2] = task.horario2Value.split(":");
+
+            let dataHorario1 = new Date(anoAtual, mesAtual, diaAtual, hour1, minute1, 0).getTime();
+            let dataHorario2 = new Date(anoAtual, mesAtual, diaAtual, hour2, minute2, 0).getTime();
+            let dataTask1 = new Date(anoAtual, mesAtual, diaAtual, taskHour1, taskMinute1, 0).getTime();
+            let dataTask2 = new Date(anoAtual, mesAtual, diaAtual, taskHour2, taskMinute2, 0).getTime();
+
+            console.log("hr 1 " + dataHorario1);
+            console.log("task 1" + dataTask1);
+            console.log("task 2" + dataTask2);
+
+            if(dataHorario1 >= dataTask1){
+                console.log(true)
                 return true;
             }
-            else if(horario2Value >= task.horario1Value && horario2Value <= task.horario2Value){
+            else if(dataHorario1 >= dataTask1 && dataHorario2 <= dataTask2){
                 return true;
             }
         }))
-    return false;
 }
     
 
-    if(validationHour()){
+    if(validationHour(horario1Value, horario2Value)){
         tarefa.value = "";
         horario1.value = "";
         horario2.value = "";
@@ -93,7 +108,7 @@ botaoTarefa?.addEventListener("click", function(){
         return;
     }
 
-    if(validationNull()){
+    if(validationNull(tarefaValue, horario1Value, horario2Value)){
         tarefa.value = "";
         horario1.value = "";
         horario2.value = "";
@@ -101,13 +116,6 @@ botaoTarefa?.addEventListener("click", function(){
         erro.textContent = "Nenhum campo pode ser vazio!";
   
         return;
-    }
-
-    function validationNull(){
-        if(tarefaValue.trim() == "" || horario1Value == "" || horario2Value == ""){
-            return true;
-        }
-        return false;
     }
 
     function getHour(hourTime){
@@ -187,7 +195,7 @@ function atualizarEventos(){
         button.addEventListener("click", function(){
             const updatedTask = prompt("Coloque aqui o Nome Atualizado");
 
-            if(updatedTask.trim() == ""){
+            if(validationNull(updatedTask)){
                 return;
             }
 
