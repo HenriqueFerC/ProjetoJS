@@ -165,6 +165,7 @@ function atualizarEventos(){
             const itemStorageJSON = JSON.stringify(arrayTasks);
             localStorage.setItem('itemStorageJSON', itemStorageJSON);
             atualizarEventos();
+            removerEventos();
         })
     })
 }
