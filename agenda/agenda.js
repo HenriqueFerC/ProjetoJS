@@ -1,39 +1,37 @@
 const dataAtualJS = new Date();
 
-let diaAtual = dataAtualJS.getDate();
-let mesAtual = dataAtualJS.getMonth()+1;
-let anoAtual = dataAtualJS.getFullYear();
+const diaAtual = dataAtualJS.getDate();
+const mesAtual = dataAtualJS.getMonth() + 1;
+const anoAtual = dataAtualJS.getFullYear();
 
 const todayDate = new Date(anoAtual, mesAtual, diaAtual);
 const valueDate = todayDate.getTime();
 
-let dataAtual = document.querySelector("#dataAgenda");
+const dataAtual = document.querySelector("#dataAgenda");
 dataAtual.textContent = `Essa é a minha agenda pessoal do dia ${diaAtual}/${mesAtual}/${anoAtual}`;
 
 const dataAtualStorage = localStorage.getItem('DataAtual');
 const dataAtualParse = dataAtualStorage ? JSON.parse(dataAtualStorage) : 0;
 
-if(dataAtualParse < valueDate){
+if (dataAtualParse < valueDate) {
     localStorage.removeItem('itemStorageJSON');
 }
 
 const dataAtualJSON = JSON.stringify(valueDate);
 localStorage.setItem('DataAtual', dataAtualJSON);
 
+const botaoVoltar = document.querySelector("#voltar");
 
-
-let botaoVoltar = document.querySelector("#voltar");
-
-botaoVoltar?.addEventListener("click", function(event){
+botaoVoltar?.addEventListener("click", function (event) {
     event.preventDefault();
     window.location.href = "/";
 })
 
-    
+
 const localStorageToParse = localStorage.getItem('itemStorageJSON');
 const arrayTasks = localStorageToParse ? JSON.parse(localStorageToParse) : [];
 
-arrayTasks.forEach((task)=>{
+arrayTasks.forEach((task) => {
     const listaDeTarefas = document.querySelector("#listaTarefa");
     const itemLista = document.createElement("li");
     itemLista.classList.add("lista");
@@ -45,92 +43,95 @@ arrayTasks.forEach((task)=>{
     buttonList.textContent = "Excluir";
     updateList.textContent = "Atualizar";
     listaDeTarefas.appendChild(itemLista);
-    itemLista.appendChild(buttonList);
     itemLista.appendChild(updateList);
+    itemLista.appendChild(buttonList);
 })
 
-function validationNull(tarefaValue, horario1Value, horario2Value){
-    if(tarefaValue.trim() == "" || horario1Value == "" || horario2Value == ""){
+function validationNull(tarefaValue, horario1Value, horario2Value) {
+    if (tarefaValue.trim() == "" || horario1Value == "" || horario2Value == "") {
         return true;
     }
     return false;
 }
 
-
 const botaoTarefa = document.querySelector("#botaoTarefa");
-botaoTarefa?.addEventListener("click", function(){
+botaoTarefa?.addEventListener("click", function () {
     const tarefa = document.querySelector("#tarefa");
     const tarefaValue = tarefa.value.toUpperCase();
 
-    
     const horario1 = document.querySelector("#horario1");
     const horario1Value = horario1.value;
 
     const horario2 = document.querySelector("#horario2");
     const horario2Value = horario2.value;
 
-    let erro = document.querySelector("#error");
-    
-    function validationHour(hora1, hora2){
-        arrayTasks.forEach((task => {
+    const erro = document.querySelector("#error");
+
+    let validationHourBoolean = false;
+
+    function validationHour(hora1, hora2) {
+        arrayTasks.forEach((task) => {
             const [hour1, minute1] = hora1.split(":");
             const [hour2, minute2] = hora2.split(":");
-            let [taskHour1, taskMinute1] = task.horario1Value.split(":");
-            let [taskHour2, taskMinute2] = task.horario2Value.split(":");
+            const [taskHour1, taskMinute1] = task.horario1Value.split(":");
+            const [taskHour2, taskMinute2] = task.horario2Value.split(":");
 
-            let dataHorario1 = new Date(anoAtual, mesAtual, diaAtual, hour1, minute1, 0).getTime();
-            let dataHorario2 = new Date(anoAtual, mesAtual, diaAtual, hour2, minute2, 0).getTime();
-            let dataTask1 = new Date(anoAtual, mesAtual, diaAtual, taskHour1, taskMinute1, 0).getTime();
-            let dataTask2 = new Date(anoAtual, mesAtual, diaAtual, taskHour2, taskMinute2, 0).getTime();
+            const dataHorario1 = new Date(anoAtual, mesAtual, diaAtual, hour1, minute1, 0).getTime();
+            const dataHorario2 = new Date(anoAtual, mesAtual, diaAtual, hour2, minute2, 0).getTime();
+            const dataTask1 = new Date(anoAtual, mesAtual, diaAtual, taskHour1, taskMinute1, 0).getTime();
+            const dataTask2 = new Date(anoAtual, mesAtual, diaAtual, taskHour2, taskMinute2, 0).getTime();
 
             console.log("hr 1 " + dataHorario1);
-            console.log("task 1" + dataTask1);
-            console.log("task 2" + dataTask2);
+            console.log("tk 1 " + dataTask1);
+            console.log("tk 2 " + dataTask2);
 
-            if(dataHorario1 >= dataTask1){
-                console.log(true)
-                return true;
+            if (dataHorario1 <= dataTask1 && dataHorario1 <= dataTask2) {
+                validationHourBoolean = true;
             }
-            else if(dataHorario1 >= dataTask1 && dataHorario2 <= dataTask2){
-                return true;
+            else if (dataHorario1 <= dataTask1 && dataHorario2 >= dataTask2) {
+                validationHourBoolean = true;
             }
-        }))
-}
-    
+            else if (dataHorario1 >= dataTask1 && dataHorario2 <= dataTask2) {
+                validationHourBoolean = true;
+            }
+        })
+    }
 
-    if(validationHour(horario1Value, horario2Value)){
+    validationHour(horario1Value, horario2Value);
+
+    if (validationHourBoolean) {
         tarefa.value = "";
         horario1.value = "";
         horario2.value = "";
 
-        erro.textContent = "Horário já cadastrado";
+        erro.textContent = "Existe uma agenda cadastrada no intervalo informado!";
 
         return;
     }
 
-    if(validationNull(tarefaValue, horario1Value, horario2Value)){
+    if (validationNull(tarefaValue, horario1Value, horario2Value)) {
         tarefa.value = "";
         horario1.value = "";
         horario2.value = "";
-        
+
         erro.textContent = "Nenhum campo pode ser vazio!";
-  
+
         return;
     }
 
-    function getHour(hourTime){
+    function getHour(hourTime) {
         const [hour, minute] = hourTime.split(":");
-        const dateFormat = new Date(anoAtual, mesAtual, diaAtual, hour,minute,0);
+        const dateFormat = new Date(anoAtual, mesAtual, diaAtual, hour, minute, 0);
         return dateFormat;
     }
 
-    if(getHour(horario1Value) >= getHour(horario2Value)){
+    if (getHour(horario1Value) >= getHour(horario2Value)) {
         tarefa.value = "";
         horario1.value = "";
         horario2.value = "";
-  
+
         erro.textContent = "Horário 2 precisa ser maior do que o Horário 1!";
-  
+
         return;
     }
 
@@ -144,28 +145,23 @@ botaoTarefa?.addEventListener("click", function(){
     buttonList.textContent = "Excluir";
     updateList.textContent = "Atualizar";
     itemLista.textContent = `Tarefa: ${tarefaValue} horário: ${horario1Value} às ${horario2Value}`;
-    
 
     listaDeTarefas.appendChild(itemLista);
-    itemLista.appendChild(buttonList);
     itemLista.appendChild(updateList);
+    itemLista.appendChild(buttonList);
 
     const itemStorage = {
         tarefaValue,
         horario1Value,
         horario2Value
-        };
+    };
     arrayTasks.push(itemStorage);
     const itemStorageJSON = JSON.stringify(arrayTasks);
-    
 
     tarefa.value = "";
     horario1.value = "";
     horario2.value = "";
     erro.textContent = "";
-
-
-
 
     localStorage.setItem('itemStorageJSON', itemStorageJSON);
     removerEventos();
@@ -189,18 +185,18 @@ function removerEventos() {
 
 removerEventos();
 
-function atualizarEventos(){
+function atualizarEventos() {
     const updateButton = document.querySelectorAll(".updateList");
     updateButton.forEach((button, index) => {
-        button.addEventListener("click", function(){
+        button.addEventListener("click", function () {
             const updatedTask = prompt("Coloque aqui o Nome Atualizado");
 
-            if(validationNull(updatedTask)){
+            if (validationNull(updatedTask)) {
                 return;
             }
 
             arrayTasks[index].tarefaValue = updatedTask;
-            
+
             const listaDeTarefas = document.querySelector("#listaTarefa");
             listaDeTarefas.children[index].textContent = `Tarefa: ${updatedTask} horário: ${arrayTasks[index].horario1Value} às ${arrayTasks[index].horario2Value}`;
 
