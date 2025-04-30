@@ -35,7 +35,8 @@ function listTasks(tarefaValue, horario1Value, horario2Value) {
     const listaDeTarefas = document.querySelector("#listaTarefa");
     const itemLista = document.createElement("li");
     itemLista.classList.add("lista");
-    itemLista.innerHTML = `Tarefa: <span id="span">${tarefaValue}</span> horário: ${horario1Value} às ${horario2Value}`;
+    const [hour, minute] = horario1Value.split(":");
+    itemLista.innerHTML = `Tarefa: <span id="${tarefaValue.trim()}-${hour}-${minute}">${tarefaValue}</span> horário: ${horario1Value} às ${horario2Value}`;
     const buttonList = document.createElement("button");
     const updateList = document.createElement("button");
     buttonList.classList.add("buttonList");
@@ -47,7 +48,7 @@ function listTasks(tarefaValue, horario1Value, horario2Value) {
     itemLista.appendChild(buttonList);
 }
 
-function resetValues(tarefa, horario1, horario2){
+function resetValues(tarefa, horario1, horario2) {
     tarefa.value = "";
     horario1.value = "";
     horario2.value = "";
@@ -97,7 +98,7 @@ botaoTarefa?.addEventListener("click", function () {
             else if (dataHorario1 <= dataTask1 && dataHorario2 >= dataTask2) {
                 validationHourBoolean = true;
             }
-            else if (dataHorario1 >= dataTask1 && dataHorario2 <= dataTask2) {
+            else if (dataHorario1 >= dataTask1 && dataHorario1 <= dataTask2) {
                 validationHourBoolean = true;
             }
         })
@@ -142,7 +143,7 @@ botaoTarefa?.addEventListener("click", function () {
         horario1Value,
         horario2Value
     };
-    
+
     arrayTasks.push(itemStorage);
     const itemStorageJSON = JSON.stringify(arrayTasks);
 
@@ -175,23 +176,27 @@ function atualizarEventos() {
     const updateButton = document.querySelectorAll(".updateList");
     updateButton.forEach((button, index) => {
         button.addEventListener("click", function () {
-            const updatedTask = prompt("Coloque aqui o Nome Atualizado");
+            let updatedTask = prompt("Coloque aqui o Nome Atualizado");
 
-            if (validationNull(updatedTask)) {
+            if (validationNull(updatedTask, arrayTasks[index].horario1Value, arrayTasks[index].horario2Value)) {
                 return;
             }
+
+
+            const spanId = arrayTasks[index].horario1Value;
+            const [hour, minute] = spanId.split(":");
+            const span = document.querySelector(`#${arrayTasks[index].tarefaValue.trim()}-${hour}-${minute}`);
+            span.textContent = updatedTask;
+            span.id = `${updatedTask}-${hour}-${minute}`;
+            console.log(span.textContent);
 
             arrayTasks[index].tarefaValue = updatedTask;
 
 
-            const itemLista = document.querySelectorAll("#lista");
-            const span = document.querySelectorAll("#span");
-            item.children[index] = `${updatedTask}`
 
 
             const itemStorageJSON = JSON.stringify(arrayTasks);
             localStorage.setItem('itemStorageJSON', itemStorageJSON);
-            atualizarEventos();
             removerEventos();
         })
     })
