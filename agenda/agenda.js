@@ -34,8 +34,9 @@ const arrayTasks = localStorageToParse ? JSON.parse(localStorageToParse) : [];
 function listTasks(tarefaValue, horario1Value, horario2Value) {
     const listaDeTarefas = document.querySelector("#listaTarefa");
     const itemLista = document.createElement("li");
-    itemLista.classList.add("lista");
     const [hour, minute] = horario1Value.split(":");
+    itemLista.id = `${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
+    itemLista.classList.add("lista");
     itemLista.innerHTML = `Tarefa: <span id="span${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}">${tarefaValue}</span> horário: ${horario1Value} às ${horario2Value}`;
     const buttonList = document.createElement("button");
     const updateList = document.createElement("button");
@@ -151,7 +152,6 @@ botaoTarefa?.addEventListener("click", function () {
     erro.textContent = "";
 
     localStorage.setItem('itemStorageJSON', itemStorageJSON);
-    removerEventos();
     atualizarEventos();
 })
 
@@ -159,13 +159,22 @@ function removerEventos() {
     const buttonRemove = document.querySelectorAll(".buttonList");
     buttonRemove.forEach((button, index) => {
         button?.addEventListener("click", function () {
+            const itemListaId = arrayTasks[index].horario1Value;
+            const [hour, minute] = itemListaId.split(":");
+            console.log(`#${arrayTasks[index].tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`)
+            const itemLista = document.querySelector(`#${arrayTasks[index].tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`);
+            
+            const itemToRemove = arrayTasks.findIndex(item => item["horario1"] === arrayTasks);
+
+
             arrayTasks.splice(index, 1);
+
             const itemStorageJSON = JSON.stringify(arrayTasks);
 
             const listaDeTarefas = document.querySelector("#listaTarefa");
-            listaDeTarefas.removeChild(listaDeTarefas.children[index]);
+            listaDeTarefas.removeChild(itemLista);
 
-            localStorage.setItem('itemStorageJSON', itemStorageJSON)
+            localStorage.setItem('itemStorageJSON', itemStorageJSON);
         });
     });
 }
