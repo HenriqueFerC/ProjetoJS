@@ -34,9 +34,10 @@ const arrayTasks = localStorageToParse ? JSON.parse(localStorageToParse) : [];
 function listTasks(tarefaValue, horario1Value, horario2Value) {
     const listaDeTarefas = document.querySelector("#listaTarefa");
     const itemLista = document.createElement("li");
-    itemLista.classList.add("lista");
     const [hour, minute] = horario1Value.split(":");
-    itemLista.innerHTML = `Tarefa: <span id="${tarefaValue.trim()}-${hour}-${minute}">${tarefaValue}</span> horário: ${horario1Value} às ${horario2Value}`;
+    itemLista.id = `${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
+    itemLista.classList.add("lista");
+    itemLista.innerHTML = `Tarefa: <span id="span${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}">${tarefaValue}</span> horário: ${horario1Value} às ${horario2Value}`;
     const buttonList = document.createElement("button");
     const updateList = document.createElement("button");
     buttonList.classList.add("buttonList");
@@ -68,7 +69,7 @@ function validationNull(tarefaValue, horario1Value, horario2Value) {
 const botaoTarefa = document.querySelector("#botaoTarefa");
 botaoTarefa?.addEventListener("click", function () {
     const tarefa = document.querySelector("#tarefa");
-    const tarefaValue = tarefa.value.toUpperCase();
+    const tarefaValue = tarefa.value;
 
     const horario1 = document.querySelector("#horario1");
     const horario1Value = horario1.value;
@@ -151,56 +152,58 @@ botaoTarefa?.addEventListener("click", function () {
     erro.textContent = "";
 
     localStorage.setItem('itemStorageJSON', itemStorageJSON);
-    removerEventos();
-    atualizarEventos();
+    addAndRemoveButtonUpdate();
+    addAndRemoveButtonRemove();
 })
 
-function removerEventos() {
+function removerEventos(event, index) {
+    arrayTasks.splice(index, 1);
+    localStorage.setItem('itemStorageJSON', JSON.stringify(arrayTasks));
+
+    const itemLista = event.target.parentElement;
+    if (itemLista) {
+        itemLista.remove();
+    }
+
+    addAndRemoveButtonRemove();
+}
+
+function addAndRemoveButtonRemove() {
     const buttonRemove = document.querySelectorAll(".buttonList");
     buttonRemove.forEach((button, index) => {
-        button?.addEventListener("click", function () {
-            arrayTasks.splice(index, 1);
-            const itemStorageJSON = JSON.stringify(arrayTasks);
-
-            const listaDeTarefas = document.querySelector("#listaTarefa");
-            listaDeTarefas.removeChild(listaDeTarefas.children[index]);
-
-            localStorage.setItem('itemStorageJSON', itemStorageJSON)
-        });
+        button?.removeEventListener("click", (event) => removerEventos(event, index));
+        button?.addEventListener("click", (event) => removerEventos(event, index));
     });
 }
 
-removerEventos();
+addAndRemoveButtonRemove();
 
-function atualizarEventos() {
+function atualizarEventos(event, index) {
+    const updatedTask = prompt("Coloque aqui o Nome Atualizado");
+
+    if (validationNull(updatedTask, arrayTasks[index].horario1Value, arrayTasks[index].horario2Value)) {
+        return;
+    }
+
+    const spanId = arrayTasks[index].horario1Value;
+    const [hour, minute] = spanId.split(":");
+    const span = document.querySelector(`#span${arrayTasks[index].tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`);
+    span.textContent = `${updatedTask}`;
+    span.id = `span${updatedTask.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
+
+    arrayTasks[index].tarefaValue = updatedTask;
+
+    const itemStorageJSON = JSON.stringify(arrayTasks);
+    localStorage.setItem('itemStorageJSON', itemStorageJSON);
+    atualizarEventos();
+}
+
+function addAndRemoveButtonUpdate() {
     const updateButton = document.querySelectorAll(".updateList");
     updateButton.forEach((button, index) => {
-        button.addEventListener("click", function () {
-            let updatedTask = prompt("Coloque aqui o Nome Atualizado");
-
-            if (validationNull(updatedTask, arrayTasks[index].horario1Value, arrayTasks[index].horario2Value)) {
-                return;
-            }
-
-
-            const spanId = arrayTasks[index].horario1Value;
-            const [hour, minute] = spanId.split(":");
-            const span = document.querySelector(`#${arrayTasks[index].tarefaValue.trim()}-${hour}-${minute}`);
-            span.textContent = updatedTask;
-            span.id = `${updatedTask}-${hour}-${minute}`;
-            console.log(span.textContent);
-
-            arrayTasks[index].tarefaValue = updatedTask;
-
-
-
-
-            const itemStorageJSON = JSON.stringify(arrayTasks);
-            localStorage.setItem('itemStorageJSON', itemStorageJSON);
-            removerEventos();
-        })
+        button?.removeEventListener("click", (event) => atualizarEventos(event, index));     
+        button?.addEventListener("click", (event) => atualizarEventos(event, index));     
     })
 }
 
-atualizarEventos();
-
+addAndRemoveButtonUpdate();
