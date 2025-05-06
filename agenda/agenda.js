@@ -156,23 +156,28 @@ botaoTarefa?.addEventListener("click", function () {
     addAndRemoveButtonRemove();
 })
 
-function removerEventos(event, index) {
-    arrayTasks.splice(index, 1);
-    localStorage.setItem('itemStorageJSON', JSON.stringify(arrayTasks));
-
+function removerEventos(event) {
+    
     const itemLista = event.target.parentElement;
+    
+    const listaDeTarefas = document.querySelector("#listaTarefa");
+    const tarefasInArray = Array.from(listaDeTarefas.children)
+    const tarefaIndex = tarefasInArray.indexOf(itemLista);
+
     if (itemLista) {
         itemLista.remove();
+
+        console.log(tarefaIndex); 
+        arrayTasks.splice(tarefaIndex, 1);
+        localStorage.setItem('itemStorageJSON', JSON.stringify(arrayTasks));
     }
 
-    addAndRemoveButtonRemove();
 }
 
 function addAndRemoveButtonRemove() {
     const buttonRemove = document.querySelectorAll(".buttonList");
-    buttonRemove.forEach((button, index) => {
-        button?.removeEventListener("click", (event) => removerEventos(event, index));
-        button?.addEventListener("click", (event) => removerEventos(event, index));
+    buttonRemove.forEach((button) => {
+        button?.addEventListener("click", (event) => removerEventos(event));
     });
 }
 
