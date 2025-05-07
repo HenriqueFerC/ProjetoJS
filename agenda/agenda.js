@@ -38,15 +38,18 @@ function listTasks(tarefaValue, horario1Value, horario2Value) {
     itemLista.id = `${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
     itemLista.classList.add("lista");
     itemLista.innerHTML = `Tarefa: <span id="span${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}">${tarefaValue}</span> horário: ${horario1Value} às ${horario2Value}`;
-    const buttonList = document.createElement("button");
+    const deleteList = document.createElement("button");
     const updateList = document.createElement("button");
-    buttonList.classList.add("buttonList");
+    deleteList.classList.add("buttonList");
     updateList.classList.add("updateList");
-    buttonList.textContent = "Excluir";
+    deleteList.textContent = "Excluir";
     updateList.textContent = "Atualizar";
     listaDeTarefas.appendChild(itemLista);
     itemLista.appendChild(updateList);
-    itemLista.appendChild(buttonList);
+    itemLista.appendChild(deleteList);
+
+    deleteList.addEventListener("click", (event) => removerEventos(event));
+    updateList.addEventListener("click", (event) => atualizarEventos(event));
 }
 
 function resetValues(tarefa, horario1, horario2) {
@@ -152,14 +155,11 @@ botaoTarefa?.addEventListener("click", function () {
     erro.textContent = "";
 
     localStorage.setItem('itemStorageJSON', itemStorageJSON);
-    addAndRemoveButtonUpdate();
-    addAndRemoveButtonRemove();
 })
 
 function removerEventos(event) {
-    
     const itemLista = event.target.parentElement;
-    
+
     const listaDeTarefas = document.querySelector("#listaTarefa");
     const tarefasInArray = Array.from(listaDeTarefas.children)
     const tarefaIndex = tarefasInArray.indexOf(itemLista);
@@ -167,48 +167,34 @@ function removerEventos(event) {
     if (itemLista) {
         itemLista.remove();
 
-        console.log(tarefaIndex); 
+        console.log(tarefaIndex);
         arrayTasks.splice(tarefaIndex, 1);
         localStorage.setItem('itemStorageJSON', JSON.stringify(arrayTasks));
     }
 
 }
 
-function addAndRemoveButtonRemove() {
-    const buttonRemove = document.querySelectorAll(".buttonList");
-    buttonRemove.forEach((button) => {
-        button?.addEventListener("click", (event) => removerEventos(event));
-    });
-}
-
-addAndRemoveButtonRemove();
-
-function atualizarEventos(event, index) {
+function atualizarEventos(event) {
     const updatedTask = prompt("Coloque aqui o Nome Atualizado");
 
-    if (validationNull(updatedTask, arrayTasks[index].horario1Value, arrayTasks[index].horario2Value)) {
-        return;
-    }
+    const itemLista = event.target.parentElement;
+    const spanItem = itemLista.children[0].textContent;
 
-    const spanId = arrayTasks[index].horario1Value;
+    const indexToUpdate = arrayTasks.findIndex(i => i.tarefaValue === spanItem);
+
+    itemLista.children[0].textContent = `${updatedTask}`
+
+    const spanId = arrayTasks[indexToUpdate].horario1Value;
     const [hour, minute] = spanId.split(":");
-    const span = document.querySelector(`#span${arrayTasks[index].tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`);
-    span.textContent = `${updatedTask}`;
-    span.id = `span${updatedTask.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
+    
+    if (validationNull(updatedTask, arrayTasks[indexToUpdate].horario1Value, arrayTasks[indexToUpdate].horario2Value)) {
+    return;
+    }
+    
+    itemLista.id = `${updatedTask.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
 
-    arrayTasks[index].tarefaValue = updatedTask;
+    arrayTasks[indexToUpdate].tarefaValue = updatedTask;
 
     const itemStorageJSON = JSON.stringify(arrayTasks);
     localStorage.setItem('itemStorageJSON', itemStorageJSON);
-    atualizarEventos();
-}
-
-function addAndRemoveButtonUpdate() {
-    const updateButton = document.querySelectorAll(".updateList");
-    updateButton.forEach((button, index) => {
-        button?.removeEventListener("click", (event) => atualizarEventos(event, index));     
-        button?.addEventListener("click", (event) => atualizarEventos(event, index));     
-    })
-}
-
-addAndRemoveButtonUpdate();
+}   
