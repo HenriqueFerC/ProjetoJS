@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="agenda.css">
+    <script src="agenda.js" defer></script>
+</head>
+
+<body>
+    <main>
+        <div id="titulo">
+            <h1 id="dataAgenda">Essa é a minha agenda do dia x</h1>
+            <img src="/images/ilustracao-de-seta-isolada_23-2151904237.avif" id="voltar">
+        </div>
+        <div>
+            <h2 id="tarefaTitle">Tarefas à fazer:</h2>
+        </div>
+        <div id="inserirTarefa">
+            <input type="text" placeholder="Insira aqui sua tarefa" id="tarefa">
+            <input type="time" placeholder="hh:mm" id="horario1">às
+            <input type="time" placeholder="hh:mm" id="horario2">
+            <button id="botaoTarefa">Adicionar</button>
+        </div>
+        <div id="inputCamp" class="invisible">
+            <input type="text" placeholder="Novo nome da tarefa" id="updateTask" class="invisible">
+            <button id="enviarUpdate" class="invisible">Enviar</button>
+        </div>
+        <div>
+            <p id="error"></p>
+            <ul id="listaTarefa">
+            </ul>
+        </div>
+    </main>
+
+</body>
+
+</html>
