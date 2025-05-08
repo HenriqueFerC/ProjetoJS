@@ -99,11 +99,39 @@ main{
     font-family: "Dancing Script", cursive;
 }
 
-.updateList{
-    margin-left: 1rem;
-    background-color: lightskyblue;
-    font-family: "Dancing Script", cursive  ;
-    width: 5vw;
-    height: 6vh;
+
+#updateTask{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10rem rgba(39, 27, 27, 0.5);
 }
 
+.inputCamp{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.3); /* escurece um pouco */
+    z-index: 1;
+}
+
+#enviarUpdate{
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background-color: lightseagreen;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10rem rgba(39, 27, 27, 0.5);
+    cursor: pointer;
+}
