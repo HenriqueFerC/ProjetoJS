@@ -38,6 +38,7 @@ function listTasks(tarefaValue, horario1Value, horario2Value) {
     itemLista.id = `${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
     itemLista.classList.add("lista");
     itemLista.innerHTML = `Tarefa: <span id="span${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}">${tarefaValue}</span> horário: ${horario1Value} às ${horario2Value}`;
+  
     const deleteList = document.createElement("button");
     const updateList = document.createElement("button");
     deleteList.classList.add("buttonList");
@@ -45,6 +46,7 @@ function listTasks(tarefaValue, horario1Value, horario2Value) {
     deleteList.textContent = "Excluir";
     updateList.textContent = "Atualizar";
     listaDeTarefas.appendChild(itemLista);
+  
     itemLista.appendChild(updateList);
     itemLista.appendChild(deleteList);
 
@@ -171,12 +173,11 @@ function removerEventos(event) {
         arrayTasks.splice(tarefaIndex, 1);
         localStorage.setItem('itemStorageJSON', JSON.stringify(arrayTasks));
     }
-
 }
 
 function atualizarEventos(event) {
     const updatedTask = prompt("Coloque aqui o Nome Atualizado");
-
+  
     const itemLista = event.target.parentElement;
     const spanItem = itemLista.children[0].textContent;
 
