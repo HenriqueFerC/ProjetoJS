@@ -96,9 +96,16 @@ main{
     height: 6vh;
     width: 5vw;
     background-color: rgb(241, 90, 90);
-    font-family: "Dancing Script", cursive;
+    font-family: 'Times New Roman', Times, serif;
 }
 
+.updateList{
+    margin-left: 1rem;
+    font-family: 'Times New Roman', Times, serif;
+    height: 6vh;
+    width: 5vw;
+    background-color: rgb(47, 182, 223);
+}
 
 #updateTask{
     position: fixed;
@@ -112,15 +119,19 @@ main{
     box-shadow: 0 0 10rem rgba(39, 27, 27, 0.5);
 }
 
-.inputCamp{
+#inputCamp{
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
     background-color: rgba(0, 0, 0, 0.3); /* escurece um pouco */
     z-index: 1;
+}
+
+.invisible{
+    visibility: hidden;
 }
 
 #enviarUpdate{

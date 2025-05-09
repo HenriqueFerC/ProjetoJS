@@ -175,27 +175,57 @@ function removerEventos(event) {
     }
 }
 
-function atualizarEventos(event) {
-    const updatedTask = prompt("Coloque aqui o Nome Atualizado");
-  
-    const itemLista = event.target.parentElement;
+let itemLista = "";
+let indexToUpdate = "";
+
+function atualizarEventos(event) {  
+    itemLista = event.target.parentElement;
     const spanItem = itemLista.children[0].textContent;
+    indexToUpdate = arrayTasks.findIndex(i => i.tarefaValue === spanItem);
 
-    const indexToUpdate = arrayTasks.findIndex(i => i.tarefaValue === spanItem);
+    const inputCamp = document.querySelectorAll(".invisible");
+    inputCamp.forEach((i) => {
+        i.classList.remove("invisible");
+    })
+}  
 
-    itemLista.children[0].textContent = `${updatedTask}`
+const botaoAtualizar = document.querySelector("#enviarUpdate");
+botaoAtualizar.addEventListener("click", () => {
+    const updateTask = document.querySelector("#updateTask");
+    const updateTaskValue = updateTask.value;
 
     const spanId = arrayTasks[indexToUpdate].horario1Value;
     const [hour, minute] = spanId.split(":");
     
-    if (validationNull(updatedTask, arrayTasks[indexToUpdate].horario1Value, arrayTasks[indexToUpdate].horario2Value)) {
-    return;
+    if (validationNull(updateTaskValue, arrayTasks[indexToUpdate].horario1Value, arrayTasks[indexToUpdate].horario2Value)) {
+        const inputCampCSS = document.querySelector("#inputCamp");
+        const updateTaskCSS = document.querySelector("#updateTask");
+        const enviarUpdateCSS = document.querySelector("#enviarUpdate");
+        inputCampCSS.classList.add("invisible");
+        updateTaskCSS.classList.add("invisible");
+        enviarUpdateCSS.classList.add("invisible");
+        updateTask.value = "";
+        itemLista = "";
+        indexToUpdate = "";
+        return;
     }
     
-    itemLista.id = `${updatedTask.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
-
-    arrayTasks[indexToUpdate].tarefaValue = updatedTask;
-
+    itemLista.children[0].textContent = `${updateTaskValue}`
+    itemLista.id = `${updateTaskValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
+    
+    arrayTasks[indexToUpdate].tarefaValue = updateTaskValue;
+    
     const itemStorageJSON = JSON.stringify(arrayTasks);
     localStorage.setItem('itemStorageJSON', itemStorageJSON);
-}   
+
+    const inputCampCSS = document.querySelector("#inputCamp");
+    const updateTaskCSS = document.querySelector("#updateTask");
+    const enviarUpdateCSS = document.querySelector("#enviarUpdate");
+    inputCampCSS.classList.add("invisible");
+    updateTaskCSS.classList.add("invisible");
+    enviarUpdateCSS.classList.add("invisible");
+
+    updateTask.value = "";
+    itemLista = "";
+    indexToUpdate = "";
+})
