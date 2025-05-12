@@ -7,11 +7,11 @@
 }   
 
 body{   
-    background-color: rgb(145, 142,  142);
+    background-color: rgb(255, 255, 255);
 }   
 
 header{ 
-    background-color:   rgb(16, 166 , 212);
+    background-color:   rgb(48, 169, 250);
     font-style: oblique;    
     display: flex;  
     justify-content: space-around;  
@@ -31,7 +31,7 @@ header{
     margin: 1rem;   
     border: 0.15rem solid black;    
     padding: 1rem;  
-    background-color: rgb(157, 29,  231);
+    background-color: rgb(243, 24, 24);
     color: white;
     cursor: pointer;
     align-self: center;
@@ -42,7 +42,7 @@ header{
     margin: 1rem;   
     border: 0.15rem solid black;    
     padding: 1rem;  
-    background-color: rgb(157, 29,  231);
+    background-color: rgb(243, 24, 24);
     color: white;
     cursor: pointer;
     align-self: center;
@@ -58,7 +58,6 @@ main{
 }   
 
 .inicio{    
-    color: yellow;  
     font-size: 1.05rem; 
 }   
 

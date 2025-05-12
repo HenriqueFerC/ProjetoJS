@@ -20,6 +20,7 @@ if (dataAtualParse < valueDate) {
 const dataAtualJSON = JSON.stringify(valueDate);
 localStorage.setItem('DataAtual', dataAtualJSON);
 
+const erro = document.querySelector("#error");
 const botaoVoltar = document.querySelector("#voltar");
 
 botaoVoltar?.addEventListener("click", function (event) {
@@ -37,7 +38,7 @@ function listTasks(tarefaValue, horario1Value, horario2Value) {
     const [hour, minute] = horario1Value.split(":");
     itemLista.id = `${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}`;
     itemLista.classList.add("lista");
-    itemLista.innerHTML = `Tarefa: <span id="span${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}">${tarefaValue}</span> horário: ${horario1Value} às ${horario2Value}`;
+    itemLista.innerHTML = `Tarefa: <span id="span${tarefaValue.replace(/\s/g, '').replace(/[^a-zA-Z0-9]/g, "")}-${hour}-${minute}">${tarefaValue}</span> horário: <span>${horario1Value}</span> às <span>${horario2Value}</span>`;
   
     const deleteList = document.createElement("button");
     const updateList = document.createElement("button");
@@ -82,7 +83,6 @@ botaoTarefa?.addEventListener("click", function () {
     const horario2 = document.querySelector("#horario2");
     const horario2Value = horario2.value;
 
-    const erro = document.querySelector("#error");
 
     let validationHourBoolean = false;
 
@@ -207,6 +207,7 @@ botaoAtualizar.addEventListener("click", () => {
         updateTask.value = "";
         itemLista = "";
         indexToUpdate = "";
+        erro.textContent = `O nome da tarefa não pode ser vazio!`
         return;
     }
     
