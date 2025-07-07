@@ -45,17 +45,22 @@ header{
     justify-content: center;
     background-color: aquamarine;
     list-style-type: none;
-    padding: 1rem;
+    padding: 0.5rem;
     font-size: 2rem;
     flex: 1 1 25%;
     border: 0.15rem solid black;
-    cursor: crosshair;
+    cursor: pointer;
+}
+
+.apagar{
+    width: 5vw;
+    height: 6vh;
 }
 
 #resposta{
     margin-top: 2rem;
     padding: 2rem;
-    font-size: 1.5rem;
+    font-size: 3rem;
     border: 0.15rem solid black;
     width: 50vw;
     background-color: rgb(187, 186, 182);
