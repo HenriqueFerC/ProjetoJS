@@ -7,7 +7,6 @@ voltar.addEventListener("click", function(event){
 
 const numeros = document.querySelector("#numbers");
 
-let lastClick = "";
 
 let calcular = [];
 let historico = [];
@@ -39,6 +38,8 @@ numeros.addEventListener("click", function(event){
         case 11:
             if (calcular.findIndex(i => i === ".") >= 0){
                 return;
+            } else if(calcular.at(0) == '-' && calcular.length == 1){
+                return;
             }
             numeroClicado = ".";
             break;
@@ -55,6 +56,13 @@ numeros.addEventListener("click", function(event){
             numeroClicado = '*';
             break;
         case 15:
+            if(calcular.length <= 1 && historico.length == 0){
+                calcular.pop();
+                return;
+            }
+            if(calcular.at(0) == '*' && calcular.length == 1 && historico.length != 0 || calcular.at(0) == '/' && calcular.length == 1 && historico.length != 0 || calcular.at(0) == '+' && calcular.length == 1 && historico.length != 0 || calcular.at(0) =='-' && calcular.length == 1 && historico.length != 0){
+                calcular.pop();
+            }
             historico.push(...calcular);
             const result = eval(historico.join(""));
             historico = [result]
@@ -74,19 +82,43 @@ numeros.addEventListener("click", function(event){
             historico = [];
             showResult.textContent = "Resultado";
             return;
+        case 18:
+            let calcularLenght = calcular.length != 0;
+            const historicoLenght = historico.length != 0;
+            if(calcularLenght){
+                calcular.pop();
+                resultFormat = historico.join("") + calcular.join("");
+                showResult.textContent = resultFormat;
+                calcularLenght = calcular.length != 0;
+            }
+            if(!calcularLenght && !historicoLenght){
+                showResult.textContent = "Resultado";
+                return;
+            }
+            return;
     }
 
-
-
+    const result = historico.at(-1);
+    
+        if(result == '.'){
+        if(numeroClicado == '*' || numeroClicado == '/' || numeroClicado == '+' || numeroClicado =='-'){
+            numeroClicado = 30;
+            calcular = [...historico]
+            historico = [];
+            return;
+        }
+    }
+    
     calcular.push(numeroClicado);
     
     const booleanFindIndex = calcular.findIndex(i => i == '/' || i == '*' || i == '+' || i =='0')
-
+    
     if(calcular.length == 1 && booleanFindIndex == 0 && historico.length == 0){
         calcular = [];
         showResult.textContent = "Resultado";
         return;
     }
+    
     
     resultFormat = historico.join("") + calcular.join("");
     showResult.textContent = resultFormat;
